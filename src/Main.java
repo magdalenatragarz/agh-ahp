@@ -1,7 +1,9 @@
 public class Main {
 
     public static void main(String[] args){
-        Interview.interview();
+        Interview.introduction();
+        Interview.askForAlternatives();
+        Interview.show();
     }
 
 }
