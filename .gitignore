@@ -27,4 +27,5 @@ AHP.iml
 
 .idea/
 out/
-
+*.json
+*.txt
