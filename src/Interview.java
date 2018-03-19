@@ -12,11 +12,9 @@ class Interview {
     JSONArray alternatives = new JSONArray();
 
     private ArrayList<String> alternativesList = new ArrayList<>();
-    //private ArrayList<String> criterias = new ArrayList<>();
 
     void interviewMe(){
         askForAlternatives();
-        //lookforCriterias(treeFile);
         build();
 
     }
@@ -25,13 +23,12 @@ class Interview {
         try (FileWriter file = new FileWriter("C:\\Users\\Magda\\IdeaProjects\\AHP\\JSONExample.json")) {
             file.write(treeFile.toJSONString());
             System.out.println("Successfully Copied JSON Object to File...");
-            //System.out.println("\nJSON Object: " + obj);
         }catch(IOException e){
             e.printStackTrace();
         }
     }
 
-  void askForAlternatives() {
+    void askForAlternatives() {
       String alternativeBuffer;
       String firstPermission;
       int numberOfAternatives;
@@ -60,8 +57,9 @@ class Interview {
           if(firstPermission.equals("y")) {
               JSONObject goal = new JSONObject();
               treeFile.put("goal",lookforCriterias(goal));
+              //treeFile.put()
           }else{
-              JSONArray compareAlternativesMatrix = createMatrix(alternativesList);
+              JSONArray compareAlternativesMatrix = createMatrix(alternativesList,0);
               treeFile.put("goal",compareAlternativesMatrix);
 
           }
@@ -79,22 +77,15 @@ class Interview {
       Scanner numberScanner = new Scanner(System.in);
       Scanner criteriaScanner = new Scanner(System.in);
       Scanner permissionScanner = new Scanner(System.in);
-      Scanner firstPermissionScanner = new Scanner(System.in);
+
 
       String criteriaBuffer;
       int numberOfCriterias;
       String permission;
-      String firstPermission;
 
 
-      //System.out.println("Does your problem have criterias? [y/n]");
 
-      /*firstPermission = firstPermissionScanner.nextLine();
-      while (!firstPermission.equals("y") && !firstPermission.equals("n")) {
-          System.out.println("Type y if yes, n if no.");
-          firstPermission = firstPermissionScanner.nextLine();
-      }*/
-      //if(firstPermission.equals("y")) {
+
           System.out.println("How many criterias do you have?");
           numberOfCriterias = numberScanner.nextInt();
           if (numberOfCriterias > 0) {
@@ -103,6 +94,8 @@ class Interview {
                   criteriaBuffer = criteriaScanner.nextLine();
                   buf.add(criteriaBuffer);
               }
+              parent.put("matrix",createMatrix(buf,0));
+
               for (int j = 0; j < buf.size(); j++) {
                   if (!buf.get(j).equals("")) {
                       System.out.println("Does criteria " + buf.get(j) + " has subcriteria? [y/n]");
@@ -112,47 +105,65 @@ class Interview {
                           permission = permissionScanner.nextLine();
                       }
                       if (permission.equals("n")) {
-                          parent.put(buf.get(j), createMatrix(buf));
+                          parent.put(buf.get(j), createMatrix(buf,1));
 
                       } else if (permission.equals("y")) {
                           JSONObject newSubrcriteria = new JSONObject();
                           parent.put(buf.get(j),lookforCriterias(newSubrcriteria));
 
                       }
-                      //criterias.add(criteriaBuffer);
-                      //lookForSubcriterias(criteriaBuffer);
                   }
               }
-          //}
       }else{
-          //treeFile.put("goal", createMatrix(alternativesList));
-          //treeFile.put("alternatives",alternatives);
+
       }
       return parent;
   }
 
-  JSONArray createMatrix(ArrayList<String> buf) {
+  /*JSONArray createLeafMatrix(){
+      JSONArray leafMatrix = new JSONArray();
+      Scanner scanner = new Scanner(System.in);
+      double asGoodAs;
+      double[][] bufferedTab = new double[alternativesList.size()][alternativesList.size()];
+
+
+
+      return leafMatrix;
+  }*/
+
+  JSONArray createMatrix(ArrayList<String> buf,int mode) {
       JSONArray pairComparsionMatrix = new JSONArray();
       Scanner scanner = new Scanner(System.in);
       double asGoodAs;
-      //System.out.println("\n\n\n\n\nBUFSIZE"+buf.size());
+      double [][] bufferedTab;
+      int size;
+      String communicate = " based on ";
+      if (mode==0) {
+          size=buf.size();
+          bufferedTab = new double[buf.size()][buf.size()];
+      }else {
+          size = alternativesList.size();
+          bufferedTab = new double[alternativesList.size()][alternativesList.size()];
+      }
 
-      double[][] bufferedTab = new double[buf.size()][buf.size()];
-      for (int i = 0; i < buf.size(); i++) {
-          for (int j = 0; j < buf.size(); j++) {
+      for (int i = 0; i < size; i++) {
+          for (int j = 0; j < size; j++) {
               if (i <= j) {
                   if (i == j) bufferedTab[j][j] = 1;
               } else {
-                  System.out.println("How many times do you find " + buf.get(i) + " more important than " + buf.get(j) + "?");
+                  if(mode==0) {
+                      System.out.println("How many times do you find " + buf.get(i) + " more important than " + buf.get(j) + "?");
+                  }else{
+                      System.out.println("How many times do you find " + alternativesList.get(i) + " more important than " + alternativesList.get(j)+communicate+" ?");
+                  }
                   asGoodAs = scanner.nextDouble();
                   bufferedTab[i][j] = asGoodAs;
                   bufferedTab[j][i] = (1 / asGoodAs);
               }
           }
       }
-          for (int k = 0; k < buf.size(); k++) {
-              for (int l = 0; l < buf.size(); l++) {
-                  //System.out.println("krok"+k+l);
+          for (int k = 0; k < size; k++) {
+              for (int l = 0; l < size; l++) {
                   pairComparsionMatrix.add(bufferedTab[k][l]);
               }
           }
@@ -161,7 +172,7 @@ class Interview {
       return pairComparsionMatrix;
   }
 
-
+/*
   void lookForSubcriterias(String criteria){
 
       String permission;
@@ -183,7 +194,7 @@ class Interview {
       }else{
 
       }
-  }
+  }*/
 
 
 
