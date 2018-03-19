@@ -14,6 +14,8 @@ public class Main {
 
         Interview x = new Interview();
         x.interviewMe();
+        //x.askForAlternatives();
+        //x.showAlternatives();
     }
 
 }

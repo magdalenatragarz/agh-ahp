@@ -16,7 +16,6 @@ class Interview {
     void interviewMe(){
         askForAlternatives();
         build();
-
     }
 
     void build(){
@@ -33,7 +32,6 @@ class Interview {
       String firstPermission;
       int numberOfAternatives;
       Scanner firstPermissionScanner = new Scanner(System.in);
-
 
       System.out.println("How many alternatives does solution of your problem have?");
 
@@ -57,13 +55,10 @@ class Interview {
           if(firstPermission.equals("y")) {
               JSONObject goal = new JSONObject();
               treeFile.put("goal",lookforCriterias(goal));
-              //treeFile.put()
           }else{
-              JSONArray compareAlternativesMatrix = createMatrix(alternativesList,0);
+              JSONArray compareAlternativesMatrix = createMatrix(alternativesList,0,"null");
               treeFile.put("goal",compareAlternativesMatrix);
-
           }
-
       }else{
           System.out.println("Nothing to choose :(");
       }
@@ -78,13 +73,9 @@ class Interview {
       Scanner criteriaScanner = new Scanner(System.in);
       Scanner permissionScanner = new Scanner(System.in);
 
-
       String criteriaBuffer;
       int numberOfCriterias;
       String permission;
-
-
-
 
           System.out.println("How many criterias do you have?");
           numberOfCriterias = numberScanner.nextInt();
@@ -94,7 +85,7 @@ class Interview {
                   criteriaBuffer = criteriaScanner.nextLine();
                   buf.add(criteriaBuffer);
               }
-              parent.put("matrix",createMatrix(buf,0));
+              parent.put("matrix",createMatrix(buf,0,"null"));
 
               for (int j = 0; j < buf.size(); j++) {
                   if (!buf.get(j).equals("")) {
@@ -105,33 +96,22 @@ class Interview {
                           permission = permissionScanner.nextLine();
                       }
                       if (permission.equals("n")) {
-                          parent.put(buf.get(j), createMatrix(buf,1));
+                          parent.put(buf.get(j), createMatrix(buf,1,buf.get(j)));
 
                       } else if (permission.equals("y")) {
                           JSONObject newSubrcriteria = new JSONObject();
                           parent.put(buf.get(j),lookforCriterias(newSubrcriteria));
-
                       }
                   }
               }
       }else{
-
+              JSONArray compareAlternativesMatrix = createMatrix(alternativesList,0,"null");
+              treeFile.put("goal",compareAlternativesMatrix);
       }
       return parent;
   }
 
-  /*JSONArray createLeafMatrix(){
-      JSONArray leafMatrix = new JSONArray();
-      Scanner scanner = new Scanner(System.in);
-      double asGoodAs;
-      double[][] bufferedTab = new double[alternativesList.size()][alternativesList.size()];
-
-
-
-      return leafMatrix;
-  }*/
-
-  JSONArray createMatrix(ArrayList<String> buf,int mode) {
+  JSONArray createMatrix(ArrayList<String> buf,int mode,String nameOfLeaf) {
       JSONArray pairComparsionMatrix = new JSONArray();
       Scanner scanner = new Scanner(System.in);
       double asGoodAs;
@@ -154,7 +134,7 @@ class Interview {
                   if(mode==0) {
                       System.out.println("How many times do you find " + buf.get(i) + " more important than " + buf.get(j) + "?");
                   }else{
-                      System.out.println("How many times do you find " + alternativesList.get(i) + " more important than " + alternativesList.get(j)+communicate+" ?");
+                      System.out.println("How many times do you find " + alternativesList.get(i) + " more important than " + alternativesList.get(j)+communicate+nameOfLeaf+" ?");
                   }
                   asGoodAs = scanner.nextDouble();
                   bufferedTab[i][j] = asGoodAs;
@@ -171,35 +151,5 @@ class Interview {
 
       return pairComparsionMatrix;
   }
-
-/*
-  void lookForSubcriterias(String criteria){
-
-      String permission;
-      int numberOfSubcriteria;
-      String subcriteriaBuffer;
-      Scanner scanner = new Scanner(System.in);
-      System.out.println("Does criteria "+criteria+" have subcriteria? [y/n]");
-      permission = scanner.nextLine();
-      if(permission.equals("y")){
-          System.out.println("How many subcriterias of "+criteria+" do you have?");
-              numberOfSubcriteria=scanner.nextInt();
-              if (numberOfSubcriteria>0) {
-                  System.out.println("Enter set of subcriterias of "+criteria+", press ENTER after each.");
-                  for (int i = 0; i < numberOfSubcriteria; i++) {
-                      subcriteriaBuffer = scanner.nextLine();
-                      //criterias.add(subcriteriaBuffer);
-                  }
-              }
-      }else{
-
-      }
-  }*/
-
-
-
-
-
-
-
+  
 }
