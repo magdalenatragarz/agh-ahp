@@ -30,13 +30,18 @@ class Interview {
     void askForAlternatives() {
       String alternativeBuffer;
       String firstPermission;
-      int numberOfAternatives;
+      int numberOfAternatives=-1;
       Scanner firstPermissionScanner = new Scanner(System.in);
 
-      System.out.println("How many alternatives does solution of your problem have?");
+      System.out.println("How many alternatives does the solution of your problem have?");
 
       Scanner numberScanner = new Scanner(System.in);
       Scanner alternativesScanner = new Scanner(System.in);
+      /*while(!numberScanner.hasNext()){
+          numberScanner.next();
+          System.out.println("Enter valid data");
+          numberOfAternatives = numberScanner.nextInt();
+      }*/
       numberOfAternatives = numberScanner.nextInt();
       if (numberOfAternatives > 0) {
           System.out.println("Enter set of your alternatives, press ENTER after each.");
@@ -80,7 +85,7 @@ class Interview {
           System.out.println("How many criterias do you have?");
           numberOfCriterias = numberScanner.nextInt();
           if (numberOfCriterias > 0) {
-              System.out.println("Enter set of criterias, press ENTER after each.");
+              System.out.println("Enter all of the possible criterias, press ENTER after each.");
               for (int i = 0; i < numberOfCriterias; i++) {
                   criteriaBuffer = criteriaScanner.nextLine();
                   buf.add(criteriaBuffer);
@@ -89,18 +94,18 @@ class Interview {
 
               for (int j = 0; j < buf.size(); j++) {
                   if (!buf.get(j).equals("")) {
-                      System.out.println("Does criteria " + buf.get(j) + " has subcriteria? [y/n]");
+                      System.out.println("Does criteria " + buf.get(j) + " has any subcriterias? [y/n]");
                       permission = permissionScanner.nextLine();
                       while (!permission.equals("y") && !permission.equals("n")) {
                           System.out.println("Type y if yes, n if no.");
                           permission = permissionScanner.nextLine();
                       }
                       if (permission.equals("n")) {
-                          parent.put(buf.get(j), createMatrix(buf,1,buf.get(j)));
+                          parent.put(buf.get(j)+" "+(j+1), createMatrix(buf,1,buf.get(j)));
 
                       } else if (permission.equals("y")) {
                           JSONObject newSubrcriteria = new JSONObject();
-                          parent.put(buf.get(j),lookforCriterias(newSubrcriteria));
+                          parent.put(buf.get(j)+" "+(j+1),lookforCriterias(newSubrcriteria));
                       }
                   }
               }
@@ -117,7 +122,7 @@ class Interview {
       double asGoodAs;
       double [][] bufferedTab;
       int size;
-      String communicate = " based on ";
+      String communicate = " in terms of ";
       if (mode==0) {
           size=buf.size();
           bufferedTab = new double[buf.size()][buf.size()];
@@ -134,7 +139,7 @@ class Interview {
                   if(mode==0) {
                       System.out.println("How many times do you find " + buf.get(i) + " more important than " + buf.get(j) + "?");
                   }else{
-                      System.out.println("How many times do you find " + alternativesList.get(i) + " more important than " + alternativesList.get(j)+communicate+nameOfLeaf+" ?");
+                      System.out.println("How many times do you find " + alternativesList.get(i) + " better than " + alternativesList.get(j)+communicate+nameOfLeaf+" ?");
                   }
                   asGoodAs = scanner.nextDouble();
                   bufferedTab[i][j] = asGoodAs;
@@ -151,5 +156,5 @@ class Interview {
 
       return pairComparsionMatrix;
   }
-  
+
 }
