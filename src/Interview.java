@@ -1,45 +1,39 @@
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 class Interview {
 
-    String lolololo;
-    //test test test
+    private JsonObject treeFile = new JsonObject();
+    private ArrayList<String> alternatives = new ArrayList<>();
 
-    LinkedHashMap<String, Object> jsonOrderedMap = new LinkedHashMap<>();
-    JSONObject treeFile = new JSONObject(); ///LinkedHashMap???
-    JSONArray alternatives = new JSONArray();
 
-    private ArrayList<String> alternativesList = new ArrayList<>();
-
-    void interviewMe() {
+    public void interviewMe() {
         askForAlternatives();
         build();
     }
 
-    void build() {
-        //Gson gson = new Gson();
+    private void build() {
+        Gson jsonBuilder = new Gson();
 
         try (FileWriter file = new FileWriter("C:\\Users\\Magda\\IdeaProjects\\AHP\\JSONExample.json")) {
-            //treeFile = new JSONObject(jsonOrderedMap);
-            file.write(treeFile.toJSONString());
-            //file.write(gson.toJson(jsonOrderedMap));
+            file.write(jsonBuilder.toJson(treeFile));
             System.out.println("Successfully Copied JSON Object to File...");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    void askForAlternatives() {
+    private void askForAlternatives() {
         String alternativeBuffer;
         String firstPermission;
-        int numberOfAternatives = -1;
+        int numberOfAternatives;
+        JsonArray alternativesList = new JsonArray();
         Scanner firstPermissionScanner = new Scanner(System.in);
 
         System.out.println("How many alternatives does the solution of your problem have?");
@@ -54,23 +48,17 @@ class Interview {
                 alternatives.add(alternativeBuffer);
                 alternativesList.add(alternativeBuffer);
             }
-            //jsonOrderedMap.put("alternatives",alternatives);
-            treeFile.put("alternatives", alternatives);
-            System.out.println("Does your problem have criterias? [y/n]");
+            treeFile.add("alternatives", alternativesList);
+            System.out.println("Does your problem have criteria? [y/n]");
             firstPermission = firstPermissionScanner.nextLine();
             while (!firstPermission.equals("y") && !firstPermission.equals("n")) {
                 System.out.println("Type y if yes, n if no.");
                 firstPermission = firstPermissionScanner.nextLine();
             }
             if (firstPermission.equals("y")) {
-                JSONObject goal = new JSONObject();
-                //jsonOrderedMap.put("Goal",lookforCriterias(goal));
-                //jsonOrderedMap.put("Goal",lookforCriterias());
-                treeFile.put("Goal", lookforCriterias(goal));
+                treeFile.add("Goal", lookForCriteria(new JsonObject()));
             } else {
-                JSONArray compareAlternativesMatrix = createMatrix(alternativesList, 0, "null");
-                //jsonOrderedMap.put("Goal",compareAlternativesMatrix);
-                treeFile.put("Goal", compareAlternativesMatrix);
+                treeFile.add("Goal", createMatrix(alternatives, 0, "null"));
             }
         } else {
             System.out.println("Nothing to choose :(");
@@ -78,71 +66,52 @@ class Interview {
     }
 
 
-    JSONObject lookforCriterias(JSONObject parent) {
+    private JsonObject lookForCriteria(JsonObject parent) {
         ArrayList<String> buf = new ArrayList<>();
 
-        //ArrayList<String> order=new ArrayList<>();
-        //ArrayList<Object> objects = new ArrayList<>();
-
-        LinkedHashMap<String, Object> parentBuffer = new LinkedHashMap<>();
-        //parentBuffer.
         Scanner numberScanner = new Scanner(System.in);
-        Scanner criteriaScanner = new Scanner(System.in);
+        Scanner criterionScanner = new Scanner(System.in);
         Scanner permissionScanner = new Scanner(System.in);
 
-        String criteriaBuffer;
-        int numberOfCriterias;
+        String criterionBuffer;
+        int numberOfCriteria;
         String permission;
 
-        System.out.println("How many criterias do you have?");
-        numberOfCriterias = numberScanner.nextInt();
-        if (numberOfCriterias > 0) {
-            System.out.println("Enter all of the possible criterias, press ENTER after each.");
-            for (int i = 0; i < numberOfCriterias; i++) {
-                criteriaBuffer = criteriaScanner.nextLine();
-                buf.add(criteriaBuffer);
+        System.out.println("How many criteria do you have?");
+        numberOfCriteria = numberScanner.nextInt();
+        if (numberOfCriteria > 0) {
+            System.out.println("Enter all of the possible criteria, press ENTER after each.");
+            for (int i = 0; i < numberOfCriteria; i++) {
+                criterionBuffer = criterionScanner.nextLine();
+                buf.add(criterionBuffer);
             }
-            parent.put("matrix", createMatrix(buf, 0, "null"));
-            //order.add(0,"matrix");
-            //objects.add(0,createMatrix(buf, 0, "null"));
-            //parentBuffer.put("matrix", createMatrix(buf, 0, "null"));
+            parent.add("matrix", createMatrix(buf, 0, "null"));
 
             for (int j = 0; j < buf.size(); j++) {
                 if (!buf.get(j).equals("")) {
-                    System.out.println("Does criteria " + buf.get(j) + " has any subcriterias? [y/n]");
+                    System.out.println("Does criteria " + buf.get(j) + " has any subcriteria? [y/n]");
                     permission = permissionScanner.nextLine();
                     while (!permission.equals("y") && !permission.equals("n")) {
                         System.out.println("Type y if yes, n if no.");
                         permission = permissionScanner.nextLine();
                     }
                     if (permission.equals("n")) {
-                        parent.put(buf.get(j) + " " + (j + 1), createMatrix(buf, 1, buf.get(j)));
-                        //order.add(j+1,buf.get(j));
-                        //objects.add(j+1,createMatrix(buf, 1, buf.get(j));
-                        //parentBuffer.put(buf.get(j) + " " + (j + 1), createMatrix(buf, 1, buf.get(j)));
+                        parent.add(buf.get(j) + " " + (j + 1), createMatrix(buf, 1, buf.get(j)));
 
                     } else if (permission.equals("y")) {
-                        JSONObject newSubrcriteria = new JSONObject();
-                        parent.put(buf.get(j) + " " + (j + 1), lookforCriterias(newSubrcriteria));
-                        //parentBuffer.put(buf.get(j) + " " + (j + 1), lookforCriterias());
-                        //order.add(j+1,buf.get(j)+" " + (j + 1));
-                        //objects.add(j+1,lookforCriterias());
-
+                        parent.add(buf.get(j) + " " + (j + 1), lookForCriteria(new JsonObject()));
                     }
                 }
             }
         } else {
-            JSONArray compareAlternativesMatrix = createMatrix(alternativesList, 0, "null");
-            jsonOrderedMap.put("Goal", compareAlternativesMatrix);
-            treeFile.put("goal", compareAlternativesMatrix);
+            treeFile.add("Goal", createMatrix(alternatives, 0, "null"));
         }
-        //return new JSONObject(objects,order);
         return parent;
     }
 
 
-    JSONArray createMatrix(ArrayList<String> buf, int mode, String nameOfLeaf) {
-        JSONArray pairComparsionMatrix = new JSONArray();
+    private JsonArray createMatrix(ArrayList<String> buf, int mode, String nameOfLeaf) {
+        JsonArray pairwiseComparsionMatrix = new JsonArray();
         Scanner scanner = new Scanner(System.in);
         double asGoodAs;
         double[][] bufferedTab;
@@ -152,8 +121,8 @@ class Interview {
             size = buf.size();
             bufferedTab = new double[buf.size()][buf.size()];
         } else {
-            size = alternativesList.size();
-            bufferedTab = new double[alternativesList.size()][alternativesList.size()];
+            size = alternatives.size();
+            bufferedTab = new double[alternatives.size()][alternatives.size()];
         }
 
         for (int i = 0; i < size; i++) {
@@ -164,7 +133,7 @@ class Interview {
                     if (mode == 0) {
                         System.out.println("How many times do you find " + buf.get(i) + " more important than " + buf.get(j) + "?");
                     } else {
-                        System.out.println("How many times do you find " + alternativesList.get(i) + " better than " + alternativesList.get(j) + communicate + nameOfLeaf + " ?");
+                        System.out.println("How many times do you find " + alternatives.get(i) + " better than " + alternatives.get(j) + communicate + nameOfLeaf + " ?");
                     }
                     asGoodAs = scanner.nextDouble();
                     bufferedTab[i][j] = asGoodAs;
@@ -174,12 +143,10 @@ class Interview {
         }
         for (int k = 0; k < size; k++) {
             for (int l = 0; l < size; l++) {
-                pairComparsionMatrix.add(bufferedTab[k][l]);
+                pairwiseComparsionMatrix.add(bufferedTab[k][l]);
             }
         }
-
-
-        return pairComparsionMatrix;
+        return pairwiseComparsionMatrix;
     }
 
 }
