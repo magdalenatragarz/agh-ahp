@@ -13,15 +13,15 @@ class Interview {
     private ArrayList<String> alternatives = new ArrayList<>();
 
 
-    public void interviewMe() {
+    public void interviewMe(String path) {
         askForAlternatives();
-        build();
+        build(path);
     }
 
-    private void build() {
+    private void build(String path) {
         Gson jsonBuilder = new Gson();
 
-        try (FileWriter file = new FileWriter("C:\\Users\\Magda\\IdeaProjects\\AHP\\JSONExample.json")) {
+        try (FileWriter file = new FileWriter(path)) {
             file.write(jsonBuilder.toJson(treeFile));
             System.out.println("Successfully Copied JSON Object to File...");
         } catch (IOException e) {
