@@ -12,14 +12,14 @@ public class AHPObject {
         this.goal = goal;
     }
 
-
-    public String showTree() {
+    @Override
+    public String toString() {
         StringBuilder tree = new StringBuilder();
         tree.append("Alternatives: ");
         for (String a : alternatives) {
             tree.append(a + ", ");
         }
-        tree.append("\n" + goal.showCriteriaTree());
+        tree.append("\n" + goal.showCriteriaTree(1));
         return tree.toString();
     }
 

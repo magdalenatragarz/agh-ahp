@@ -1,23 +1,19 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 
 import java.io.*;
-import java.lang.reflect.Type;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        String path="C:\\Users\\Magda\\IdeaProjects\\AHP\\JSONExample.json";
+        String path = "C:\\Users\\Magda\\IdeaProjects\\AHP\\JSONExample.json";
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(AHPObject.class, new OverallDeserializer())
                 .create();
 
         AHPObject object;
-        object = gson.fromJson(readFromFile(path),AHPObject.class);
-        System.out.println(object.showTree());
+        object = gson.fromJson(readFromFile(path), AHPObject.class);
+        System.out.println(object.toString());
         //Interview x =new Interview();
         //x.interviewMe(path);
         //object.alternatives.add("xxx");
@@ -41,8 +37,6 @@ public class Main {
         }
         return jsonBuilder.toString();
     }
-
-
 
 
 }

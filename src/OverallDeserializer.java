@@ -14,7 +14,6 @@ public class OverallDeserializer implements JsonDeserializer<AHPObject> {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Criterion.class, new CriterionDeserializer())
                 .create();
-        //Criterion goal = new Criterion("Goal",new LinkedList<>(),new LinkedList<>());
         List<String> alternatives;
         List<Criterion> subcriteria = new LinkedList<>();
         List<Double> matrix = new LinkedList<>();
@@ -25,8 +24,7 @@ public class OverallDeserializer implements JsonDeserializer<AHPObject> {
 
             if (entry.getValue().isJsonObject()) {
                 Criterion criterion;
-                //criterion = jsonDeserializationContext.deserialize(entry.getValue(), Criterion.class);
-                criterion = gson.fromJson(entry.getValue(),Criterion.class);
+                criterion = gson.fromJson(entry.getValue(), Criterion.class);
                 criterion.setName(entry.getKey());
                 subcriteria.add(criterion);
 
@@ -36,14 +34,11 @@ public class OverallDeserializer implements JsonDeserializer<AHPObject> {
             } else if (entry.getValue().isJsonArray()) {
                 String name = entry.getKey();
                 matrix = jsonDeserializationContext.deserialize(entry.getValue(), List.class);
-                subcriteria.add(new Criterion(name,matrix,null));
+                subcriteria.add(new Criterion(name, matrix, null));
             }
         }
-        return new AHPObject(alternatives, new Criterion("Goal",matrix,subcriteria));
+        return new AHPObject(alternatives, new Criterion("Goal", matrix, subcriteria));
     }
-
-
-
 
 
 }

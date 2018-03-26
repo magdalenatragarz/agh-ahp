@@ -96,10 +96,10 @@ class Interview {
                         permission = permissionScanner.nextLine();
                     }
                     if (permission.equals("n")) {
-                        parent.add(buf.get(j) + " " + (j + 1), createMatrix(buf, 1, buf.get(j)));
+                        parent.add(buf.get(j), createMatrix(buf, 1, buf.get(j)));
 
                     } else if (permission.equals("y")) {
-                        parent.add(buf.get(j) + " " + (j + 1), lookForCriteria(new JsonObject()));
+                        parent.add(buf.get(j), lookForCriteria(new JsonObject()));
                     }
                 }
             }
