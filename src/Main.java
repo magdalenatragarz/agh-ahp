@@ -1,19 +1,35 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import deserializer.OverallDeserializer;
+import objects.AHPObject;
+import questionnaire.Interview;
 
 import java.io.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        String path = "C:\\Users\\Magda\\IdeaProjects\\AHP\\JSONExample.json";
+        //String path = "D:\\Pobrane\\Holidays.json";
+        String path ="C:\\Users\\Magda\\Desktop\\t.json";
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(AHPObject.class, new OverallDeserializer())
                 .create();
+        //Interview x = new Interview();
+        //x.interviewMe(path);
+        AHPObject object=new AHPObject(null,null);
+        //System.out.println(readFromFile(path));
+        try {
+            object = gson.fromJson(readFromFile(path), AHPObject.class);
+        }catch (com.google.gson.JsonSyntaxException e){
+            System.out.println("Unsupported file format");
+        }
 
-        AHPObject object;
-        object = gson.fromJson(readFromFile(path), AHPObject.class);
+        System.out.println("\n====================================================\n");
+
+
         System.out.println(object.toString());
+
+
         //Interview x =new Interview();
         //x.interviewMe(path);
         //object.alternatives.add("xxx");
@@ -35,7 +51,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return jsonBuilder.toString();
+        return jsonBuilder.toString().replace(" ","").replace("\t","").replace("\n","");
     }
 
 

@@ -1,3 +1,5 @@
+package questionnaire;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -7,7 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class Interview {
+public class Interview {
 
     private JsonObject treeFile = new JsonObject();
     private ArrayList<String> alternatives = new ArrayList<>();
@@ -62,6 +64,8 @@ class Interview {
             }
         } else {
             System.out.println("Nothing to choose :(");
+            treeFile.add("alternatives",new JsonArray());
+            treeFile.add("Goal",new JsonObject() );
         }
     }
 

@@ -1,4 +1,7 @@
+package deserializer;
+
 import com.google.gson.*;
+import objects.Criterion;
 
 import java.lang.reflect.Type;
 import java.util.LinkedList;
