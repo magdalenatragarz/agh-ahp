@@ -8,9 +8,8 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-public class OverallDeserializer implements JsonDeserializer<AHPObject> {
+class OverallDeserializer implements JsonDeserializer<AHPObject> {
 
 
     @Override
@@ -54,6 +53,8 @@ public class OverallDeserializer implements JsonDeserializer<AHPObject> {
         }
         return new AHPObject(alternatives, new Criterion("Goal", matrix, subcriteria));
     }
+
+
 
 
 }
