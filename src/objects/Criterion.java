@@ -6,6 +6,20 @@ public class Criterion {
 
 
     private String name;
+
+    public List<Double> getMatrix() {
+        return matrix;
+    }
+
+    public String getName() {
+
+        return name;
+    }
+
+    public List<Criterion> getSubcriteria() {
+        return subcriteria;
+    }
+
     private List<Double> matrix;
     private List<Criterion> subcriteria;
 

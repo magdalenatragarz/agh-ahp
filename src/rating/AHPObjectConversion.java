@@ -1,35 +1,32 @@
-package objects;
+package rating;
 
-import java.io.*;
 import java.util.List;
 
-public class AHPObject {
+class AHPObjectConversion {
 
     private List<String> alternatives;
+    private CriterionConversion goal;
 
-    private Criterion goal;
 
+    public CriterionConversion getGoal() {
 
-    public Criterion getGoal() {
         return goal;
     }
 
-    public List<String> getAlternatives() {
-
-        return alternatives;
-    }
-
-    public AHPObject(List<String> alternatives, Criterion goal) {
-        this.alternatives = alternatives;
+    public void setGoal(CriterionConversion goal) {
         this.goal = goal;
     }
 
 
+    public void setAlternatives(List<String> alternatives) {
+
+        this.alternatives = alternatives;
+    }
 
     @Override
     public String toString() {
         StringBuilder tree = new StringBuilder();
-        if((alternatives!=null && goal!=null)) {
+        if ((alternatives != null && goal != null)) {
             tree.append("Alternatives: ");
             for (String a : alternatives) {
                 tree.append(a + ", ");
@@ -40,3 +37,4 @@ public class AHPObject {
     }
 
 }
+
