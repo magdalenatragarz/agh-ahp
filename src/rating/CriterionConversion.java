@@ -8,6 +8,10 @@ public class CriterionConversion {
     private List<CriterionConversion> subcriteria;
 
 
+    public List<Double> getPriorityVector() {
+        return priorityVector;
+    }
+
     public CriterionConversion(String name, List<Double> priorityVector, List<CriterionConversion> subcriteria) {
         this.name = name;
         this.priorityVector = priorityVector;
@@ -23,8 +27,13 @@ public class CriterionConversion {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public List<CriterionConversion> getSubcriteria() {
         return subcriteria;
+
     }
 
     public String showCriteriaTree(int depth) {
