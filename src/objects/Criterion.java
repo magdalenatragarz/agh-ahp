@@ -11,10 +11,7 @@ public class Criterion {
         return matrix;
     }
 
-    public String getName() {
 
-        return name;
-    }
 
     public List<Criterion> getSubcriteria() {
         return subcriteria;

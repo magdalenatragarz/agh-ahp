@@ -1,10 +1,8 @@
 import deserializer.AHPDataReader;
-import questionnaire.Interview;
 import rating.EigenvalueMethod;
 import rating.GeometricMeanMethod;
+import rating.ProblemSolver;
 
-import java.lang.reflect.Member;
-import rating.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,18 +30,12 @@ public class Main {
         AHPDataReader dataReader = new AHPDataReader(path);
         System.out.println(dataReader.ahpObject.toString());
 
+        ProblemSolver solverEig = new ProblemSolver(new EigenvalueMethod(dataReader.ahpObject));
+        ProblemSolver solverGeo = new ProblemSolver(new GeometricMeanMethod(dataReader.ahpObject));
 
-        EigenvalueMethod eig = new EigenvalueMethod(dataReader.ahpObject);
-        eig.setRating();
-        System.out.println(eig.getRating().toString());
+        solverEig.setRating();
+        System.out.println(solverEig.toString());
 
-        GeometricMeanMethod ggg = new GeometricMeanMethod(dataReader.ahpObject);
-        ggg.setRating();
-        System.out.println(ggg.getRating());
-
-        //x.interviewMe(path);
-        //object.alternatives.add("xxx");
-        //object.showAlternatives();
     }
 
 

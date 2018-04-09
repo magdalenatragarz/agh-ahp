@@ -1,16 +1,16 @@
 package rating;
 
-import matlabcontrol.MatlabProxy;
-import matlabcontrol.MatlabProxyFactory;
-import matlabcontrol.MatlabProxyFactoryOptions;
+import exceptions.UnsupportedFileFormatException;
+import matlabcontrol.*;
 import objects.AHPObject;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.LinkedList;
 import java.util.List;
 
 abstract public class Method {
+
+    String name;
+
     List<Double> rating;
     AHPObject ahpObject;
 
@@ -18,11 +18,9 @@ abstract public class Method {
         this.ahpObject = ahpObject;
     }
 
-    abstract List<Double> createRating(CriterionConversion criterion);
 
-    public List<Double> getRating() {
-        return rating;
-    }
+    abstract List<Double> priorityVectorGenerator(List<Double> pairwiseMatrix) throws UnsupportedFileFormatException, MatlabConnectionException, MatlabInvocationException;
+
 
     MatlabProxy connect() throws matlabcontrol.MatlabConnectionException {
         MatlabProxyFactoryOptions options = new MatlabProxyFactoryOptions.Builder()
@@ -49,7 +47,8 @@ abstract public class Method {
         }
         for (java.lang.Double value : buffer) {
             doubleBuf = value / sum;
-            normalizedPriorityVector.add(BigDecimal.valueOf(doubleBuf).setScale(4, RoundingMode.HALF_UP).doubleValue());
+            normalizedPriorityVector.add(doubleBuf);
+
         }
         return normalizedPriorityVector;
     }

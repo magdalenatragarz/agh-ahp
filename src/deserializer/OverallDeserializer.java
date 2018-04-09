@@ -20,7 +20,7 @@ class OverallDeserializer implements JsonDeserializer<AHPObject> {
                 .create();
         List<String> alternatives = null;
         List<Criterion> subcriteria = new LinkedList<>();
-        List<Double> matrix = new LinkedList<>();
+        List<Double> goalMatrix = new LinkedList<>();
         boolean isGoalArray;
         try {
             alternatives = jsonDeserializationContext.deserialize(jsonElement.getAsJsonObject().get("alternatives").getAsJsonArray(), List.class);
@@ -35,9 +35,10 @@ class OverallDeserializer implements JsonDeserializer<AHPObject> {
                         subcriteria.add(criterion);
 
                     } else if (entry.getValue().isJsonArray() && entry.getKey().equals("matrix")) {
-                        matrix = jsonDeserializationContext.deserialize(entry.getValue(), List.class);
+                        goalMatrix = jsonDeserializationContext.deserialize(entry.getValue(), List.class);
 
                     } else if (entry.getValue().isJsonArray()) {
+                        List<Double> matrix;
                         String name = entry.getKey();
                         matrix = jsonDeserializationContext.deserialize(entry.getValue(), List.class);
                         subcriteria.add(new Criterion(name, matrix, null));
@@ -46,15 +47,13 @@ class OverallDeserializer implements JsonDeserializer<AHPObject> {
             } else {
                 JsonArray goalArray = jsonElement.getAsJsonObject().get("Goal").getAsJsonArray();
                 subcriteria = null;
-                matrix = jsonDeserializationContext.deserialize(goalArray, List.class);
+                goalMatrix = jsonDeserializationContext.deserialize(goalArray, List.class);
             }
         } catch (NullPointerException e) {
             System.out.println("Unsupported file format");
         }
-        return new AHPObject(alternatives, new Criterion("Goal", matrix, subcriteria));
+        return new AHPObject(alternatives, new Criterion("Goal", goalMatrix, subcriteria));
     }
-
-
 
 
 }
