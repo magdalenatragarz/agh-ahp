@@ -1,4 +1,5 @@
 import deserializer.AHPDataReader;
+import questionnaire.Interview;
 import rating.EigenvalueMethod;
 import rating.GeometricMeanMethod;
 import rating.ProblemSolver;
@@ -11,7 +12,7 @@ public class Main {
     public static void main(String[] args) {
         String path = "C:\\Users\\Magda\\Desktop\\proba.json";
 
-        //Interview interview = new Interview();
+        // Interview interview = new Interview();
         //interview.interviewMe(path);
         List<Double> dd = new LinkedList<>();
         dd.add(2.0);
@@ -35,6 +36,9 @@ public class Main {
 
         solverEig.setRating();
         System.out.println(solverEig.toString());
+
+        solverGeo.setRating();
+        System.out.println(solverGeo.toString());
 
     }
 
